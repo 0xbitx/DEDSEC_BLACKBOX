@@ -19,18 +19,34 @@ echo "[*] Building BearSSL static libs (x86_64 + ARMv7) ..."
 ( cd BearSSL && make clean && make lib CC=arm-linux-gnueabihf-gcc AR=arm-linux-gnueabihf-ar && cp build/libbearssl.a ../libbearssl_arm.a )
 
 echo
-echo "[*] OpenWRT SDK (only needed to build the 'mipsel' target) ..."
-read -r -p "    Download the OpenWRT SDK for MIPS now? (y/N) " ANS
+
+echo "[*] Bootlin MIPS BE toolchain (needed to build the 'mips' target) ..."
+read -r -p "    Download the big-endian MIPS32 uclibc toolchain now? (y/N) " ANS
 if [[ "$ANS" =~ ^[Yy]$ ]]; then
-    SDK="openwrt-sdk-23.05.4-ramips-mt7621_gcc-12.3.0_musl.Linux-x86_64"
-    URL="https://downloads.openwrt.org/releases/23.05.4/targets/ramips/mt7621/${SDK}.tar.xz"
+    SDK="mips32--uclibc--stable-2022.08-1"
+    URL="https://toolchains.bootlin.com/downloads/releases/toolchains/mips32/tarballs/${SDK}.tar.bz2"
     echo "[*] Downloading ${URL} ..."
-    wget -O "${SDK}.tar.xz" "$URL"
-    tar xf "${SDK}.tar.xz"
-    rm -f "${SDK}.tar.xz"
-    echo "[+] OpenWRT SDK ready."
+    wget -O "${SDK}.tar.bz2" "$URL"
+    tar xf "${SDK}.tar.bz2"
+    rm -f "${SDK}.tar.bz2"
+    echo "[+] Bootlin MIPS BE toolchain ready."
 else
-    echo "[!] Skipping MIPS SDK. You can build: debug / arm / armv5 / aarch64 now."
+    echo "[!] Skipping MIPS BE toolchain. You can build: debug / arm / armv5 / aarch64 now."
+fi
+
+echo
+echo "[*] Bootlin MIPS LE toolchain (needed to build the 'mipsel' target) ..."
+read -r -p "    Download the little-endian MIPS32 uclibc toolchain now? (y/N) " ANS
+if [[ "$ANS" =~ ^[Yy]$ ]]; then
+    SDK="mips32el--uclibc--stable-2022.08-1"
+    URL="https://toolchains.bootlin.com/downloads/releases/toolchains/mips32el/tarballs/${SDK}.tar.bz2"
+    echo "[*] Downloading ${URL} ..."
+    wget -O "${SDK}.tar.bz2" "$URL"
+    tar xf "${SDK}.tar.bz2"
+    rm -f "${SDK}.tar.bz2"
+    echo "[+] Bootlin MIPS LE toolchain ready."
+else
+    echo "[!] Skipping MIPS LE toolchain. You can build: debug / arm / armv5 / aarch64 now."
 fi
 
 echo
