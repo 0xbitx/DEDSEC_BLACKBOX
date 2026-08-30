@@ -285,8 +285,21 @@ sz --zmodem payload-arm
 
 ### 3. Firmware Image Injection (offline)
 
+
 For routers where you have access to the firmware image but not a live shell,
 inject the implant into the extracted filesystem before re-flashing.
+
+| Firmware Image Injection Screenshots |
+|-------|
+| ![screenshot](https://github.com/user-attachments/assets/eca018c5-b3c9-4334-b860-0aa800544f62) |
+| ![screenshot](https://github.com/user-attachments/assets/305d447f-c63f-4817-afd7-a74e6dd6e06e) |
+| ![screenshot](https://github.com/user-attachments/assets/bd6ea493-b3c5-48ec-890d-e3b735e06173) |
+| ![screenshot](https://github.com/user-attachments/assets/01123225-9686-45b8-89d1-13fae636fa2c) |
+| ![screenshot](https://github.com/user-attachments/assets/b57cc36b-476e-4439-9cdf-f2b544a11783) |
+| ![screenshot](https://github.com/user-attachments/assets/4e1e4100-478d-4752-815d-2f74dc8d6a26) |
+| ![screenshot](https://github.com/user-attachments/assets/ff87a948-4c92-45b8-a9a9-ddb2be54188a) |
+| ![screenshot](https://github.com/user-attachments/assets/a46402f7-d6cf-4a66-a999-9a5038c0698e) |
+| ![screenshot](https://github.com/user-attachments/assets/1a101303-081a-4ec4-9087-f65e2b2461bd) |
 
 #### Extract & Modify SquashFS Firmware
 
