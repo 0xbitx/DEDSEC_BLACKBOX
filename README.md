@@ -211,6 +211,11 @@ CP2102). The adapter only provides a **console**. It is not a wireless code
 execution vector by itself. This automates the same post-exploitation steps
 as SSH, but over the serial wire.
 
+| Live UART Injection (USB-to-TTL) Screenshots |
+|-------|
+| ![screenshot](https://github.com/user-attachments/assets/7bad275f-7420-45fa-98ea-da2e9267940a) |
+| ![screenshot](https://github.com/user-attachments/assets/cd1ad875-6d87-4a3e-8389-999eaeaeb9f3) |
+
 #### 2.1 Console shell injection
 
 ```bash
