@@ -120,7 +120,7 @@ sequenceDiagram
 |-------|
 | ![screenshot](https://github.com/user-attachments/assets/0fded1c2-c3df-48ec-bf7c-f5bce6db8d2d) |
 | ![screenshot](https://github.com/user-attachments/assets/f3e55b8b-205f-4354-8aec-a40788b44af5) |
-| ![screenshot](https://github.com/user-attachments/assets/f1847cf3-ee97-4c1d-89bc-45209f13951a) |
+| ![screenshot](https://github.com/user-attachments/assets/711e4278-86c6-44d2-b114-955b67a1818e) |
 | ![screenshot](https://github.com/user-attachments/assets/15554eff-b631-4df3-a547-ae10823d4245) |
 
 ---
