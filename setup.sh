@@ -19,6 +19,36 @@ echo "[*] Building BearSSL static libs (x86_64 + ARMv7) ..."
 ( cd BearSSL && make clean && make lib CC=arm-linux-gnueabihf-gcc AR=arm-linux-gnueabihf-ar && cp build/libbearssl.a ../libbearssl_arm.a )
 
 echo
+echo "[*] musl cross-toolchains (smallest ARMv7 / ARMv5 / AArch64 / x86_64 payloads) ..."
+read -r -p "    Download musl toolchains now (~465 MB download, ~1.4 GB extracted)? (y/N) " ANS
+if [[ "$ANS" =~ ^[Yy]$ ]]; then
+    ARM7="armv7-eabihf--musl--stable-2022.08-1"
+    URL="https://toolchains.bootlin.com/downloads/releases/toolchains/armv7-eabihf/tarballs/${ARM7}.tar.bz2"
+    echo "[*] Downloading ${URL} ..."
+    wget -O "${ARM7}.tar.bz2" "$URL"
+    tar xf "${ARM7}.tar.bz2" && rm -f "${ARM7}.tar.bz2"
+
+    ARM5="armv5-eabi--musl--stable-2022.08-1"
+    URL="https://toolchains.bootlin.com/downloads/releases/toolchains/armv5-eabi/tarballs/${ARM5}.tar.bz2"
+    echo "[*] Downloading ${URL} ..."
+    wget -O "${ARM5}.tar.bz2" "$URL"
+    tar xf "${ARM5}.tar.bz2" && rm -f "${ARM5}.tar.bz2"
+
+    A64="aarch64-linux-musl-cross"
+    echo "[*] Downloading https://musl.cc/${A64}.tgz ..."
+    wget -O "${A64}.tgz" "https://musl.cc/${A64}.tgz"
+    tar xf "${A64}.tgz" && rm -f "${A64}.tgz"
+
+    X64="x86_64-linux-musl-cross"
+    echo "[*] Downloading https://musl.cc/${X64}.tgz ..."
+    wget -O "${X64}.tgz" "https://musl.cc/${X64}.tgz"
+    tar xf "${X64}.tgz" && rm -f "${X64}.tgz"
+    echo "[+] musl toolchains ready (payloads drop to ~70-80 KB)."
+else
+    echo "[!] Skipping musl toolchains. ARM/AArch64/x86_64 fall back to glibc (~220-300 KB)."
+fi
+
+echo
 
 echo "[*] Bootlin MIPS BE toolchain (needed to build the 'mips' target) ..."
 read -r -p "    Download the big-endian MIPS32 uclibc toolchain now? (y/N) " ANS
