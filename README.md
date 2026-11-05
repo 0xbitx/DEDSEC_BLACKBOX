@@ -20,19 +20,19 @@ access on compromised routers and embedded devices. It focuses on **stealth**,
 tunnels** to mask the operator's infrastructure and keep the command and
 control channel anonymous.
 
-The implant is a single fully-static C++ binary (~500 KB) that runs on any
-Linux distribution with **zero dependencies**: no libraries, no interpreters,
-no runtime requirements, and no external services to configure. Deploy it on
-routers running OpenWRT, DD-WRT, ARM-based devices, or any stripped-down
-BusyBox environment. It is verified with `ldd` as *"not a dynamic executable"*,
-meaning the binary is self-contained and can be dropped onto a target without
-first installing anything on the device.
+The implant is a single fully-static C++ binary (**68–87 KB** depending on the
+target) that runs on any Linux distribution with **zero dependencies**: no
+libraries, no interpreters, no runtime requirements, and no external services
+to configure. Deploy it on routers running OpenWRT, DD-WRT, ARM-based devices,
+or any stripped-down BusyBox environment. It is verified with `ldd` as
+*"not a dynamic executable"*, meaning the binary is self-contained and can be
+dropped onto a target without first installing anything on the device.
 
 Communication flows over standard HTTPS through a **Cloudflare Argo tunnel**,
 masking the operator's real IP behind Cloudflare's global infrastructure. The
 implant polls the C2 at configurable intervals and blends into normal web
 traffic, which makes its beacons difficult to distinguish from ordinary HTTPS
-requests. All traffic is encrypted end-to-end with **TLS 1.2** (via the embedded
+requests. All traffic is encrypted end-to-end with **TLS** (via the embedded
 BearSSL library), so no command, response, or output ever travels in plaintext.
 
 A **dead-drop relay** decouples the implant from any hardcoded server address,
@@ -48,7 +48,7 @@ re-pairing or re-flashing of the device.
 - **Router-only execution**: refuses to run on desktops, VMs, or servers (detects router firmware, flash partitions, bridge interfaces, router daemons)
 - **Self-persistence**: auto-copies itself to `/usr/sbin/.kworker` and adds boot entries to rc.local, init.d, or crontab on first run
 - **Zero infrastructure**: no port forwarding, no firewall rules, no VPS
-- **Static binary**: runs on any Linux kernel 3.x+, ARM/MIPS cross-compilation supported
+- **Static binary**: 68–87 KB, runs on any Linux kernel 3.x+, ARM/MIPS cross-compilation supported
 - **Compile-time stealth**: strings XOR-obfuscated, process masquerades as `[kworker/0:1]`
 - **Dead-drop relay**: no hardcoded server addresses. C2 URL changes every restart
 - **Resilience**: relay-fetch exponential backoff (up to 60s), fixed poll interval, SIGTERM/SIGINT handler
@@ -101,12 +101,18 @@ sequenceDiagram
 
 ## Platform Support
 
-| Target                                      | Status                                   |
-|---------------------------------------------|------------------------------------------|
-| ARM 32-bit (routers, RPi 2/3)               | Cross-compile (`arm-linux-gnueabihf`) |
-| ARM 64-bit (RPi 4/5, Graviton)              | Cross-compile (`aarch64-linux-gnu`)   |
-| MIPS (OpenWRT, DD-WRT)                      | Via OpenWRT SDK                       |
-| x86_64 (desktops, servers)                  | Blocked (router-only guard)           |
+| Target                                      | Toolchain / libc              | Final size |
+|---------------------------------------------|-------------------------------|-----------:|
+| ARMv7 HF (routers, RPi 2/3)                 | musl (Bootlin)                |     68 KB  |
+| ARMv5 (older routers)                       | musl (Bootlin)                |     69 KB  |
+| ARM 64-bit (RPi 4/5, Graviton)              | musl (musl.cc)                |     76 KB  |
+| MIPS BE (OpenWRT, DD-WRT)                   | uClibc (Bootlin)              |     87 KB  |
+| MIPS LE (OpenWRT, DD-WRT)                   | uClibc (Bootlin)              |     87 KB  |
+| x86_64 (debug / local testing)              | musl (musl.cc)                |     78 KB  |
+
+> Sizes are for the final stripped, UPX-compressed binaries in `payload/`.
+> Release payloads use the router-only guard; the x86_64 build is a debug
+> target for local testing.
 
 ---
 
@@ -360,7 +366,7 @@ echo "/usr/sbin/.kworker &" >> fmk/rootfs/etc/rc.local
 - **Architecture must match**: build for the exact CPU of the target router
   (ARMv5, ARMv7, MIPS big-endian, MIPS little-endian, etc.)
 - **Space constraints**: routers often have limited flash; the static binary
-  is ~650 KB.
+  is 68–87 KB depending on the architecture.
 - **Read-only filesystems**: many routers use squashfs (read-only) with an
   overlay. Inject into the overlay partition (`/overlay`) or the jffs2
   partition for persistence across factory resets.
