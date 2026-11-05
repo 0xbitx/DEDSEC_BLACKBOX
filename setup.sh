@@ -10,13 +10,21 @@ sudo apt-get install -y \
   build-essential make upx \
   g++-arm-linux-gnueabihf g++-arm-linux-gnueabi g++-aarch64-linux-gnu
 
-tar -xf "BearSSL.tar.gz"
-rm -f "BearSSL.tar.gz"
+if [[ -f "BearSSL.tar.gz" ]]; then
+  tar -xf "BearSSL.tar.gz"
+  rm -f "BearSSL.tar.gz"
+elif [[ -d "BearSSL" ]]; then
+  echo "[*] Using existing BearSSL/ source tree."
+else
+  echo "[!] BearSSL source not found (need BearSSL.tar.gz or BearSSL/)."
+  exit 1
+fi
 
 echo
 echo "[*] Building BearSSL static libs (x86_64 + ARMv7) ..."
-( cd BearSSL && make clean && make lib CC=gcc AR=ar && cp build/libbearssl.a ../libbearssl_x86_64.a )
-( cd BearSSL && make clean && make lib CC=arm-linux-gnueabihf-gcc AR=arm-linux-gnueabihf-ar && cp build/libbearssl.a ../libbearssl_arm.a )
+BS_CFLAGS="-W -Wall -Os -ffunction-sections -fdata-sections -fno-pic -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-stack-protector"
+( cd BearSSL && make clean && make lib CC=gcc AR=gcc-ar CFLAGS="$BS_CFLAGS -flto" && cp build/libbearssl.a ../libbearssl_x86_64.a )
+( cd BearSSL && make clean && make lib CC=arm-linux-gnueabihf-gcc AR=arm-linux-gnueabihf-gcc-ar CFLAGS="$BS_CFLAGS -flto" && cp build/libbearssl.a ../libbearssl_arm.a )
 
 echo
 echo "[*] musl cross-toolchains (smallest ARMv7 / ARMv5 / AArch64 / x86_64 payloads) ..."
@@ -43,7 +51,7 @@ if [[ "$ANS" =~ ^[Yy]$ ]]; then
     echo "[*] Downloading https://musl.cc/${X64}.tgz ..."
     wget -O "${X64}.tgz" "https://musl.cc/${X64}.tgz"
     tar xf "${X64}.tgz" && rm -f "${X64}.tgz"
-    echo "[+] musl toolchains ready (payloads drop to ~70-80 KB)."
+    echo "[+] musl toolchains ready (payloads drop to ~63-83 KB)."
 else
     echo "[!] Skipping musl toolchains. ARM/AArch64/x86_64 fall back to glibc (~220-300 KB)."
 fi
