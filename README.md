@@ -20,7 +20,7 @@ access on compromised routers and embedded devices. It focuses on **stealth**,
 tunnels** to mask the operator's infrastructure and keep the command and
 control channel anonymous.
 
-The implant is a single fully-static C++ binary (**44.3–61.4 KB** depending on
+The implant is a single fully-static C++ binary (**44K B** depending on
 the target) that runs on any Linux distribution with **zero dependencies**: no
 libraries, no interpreters, no runtime requirements, and no external services
 to configure. Deploy it on routers running OpenWRT, DD-WRT, ARM-based devices,
@@ -32,7 +32,7 @@ Communication flows over standard HTTPS through a **Cloudflare Argo tunnel**,
 masking the operator's real IP behind Cloudflare's global infrastructure. The
 implant polls the C2 at configurable intervals and blends into normal web
 traffic, which makes its beacons difficult to distinguish from ordinary HTTPS
-requests. All traffic is encrypted end-to-end with **TLS** (via the embedded
+requests. All traffic is encrypted end-to-end with **TLS 1.2** (via the embedded
 BearSSL library) using **ECDHE-ECDSA over X25519 + AES-128-GCM**, so no
 command, response, or output ever travels in plaintext.
 
@@ -49,8 +49,8 @@ re-pairing or re-flashing of the device.
 - **Router-only execution**: refuses to run on desktops, VMs, or servers (detects router firmware, flash partitions, bridge interfaces, router daemons)
 - **Self-persistence**: auto-copies itself to `/usr/sbin/.kworker` and adds boot entries to rc.local, init.d, or crontab on first run
 - **Zero infrastructure**: no port forwarding, no firewall rules, no VPS
-- **Static binary**: 44.3–61.4 KB, runs on any Linux kernel 3.x+, ARM/MIPS cross-compilation supported
-- **Minimal TLS footprint**: TLS 1.2 with ECDHE-ECDSA over X25519 + AES-128-GCM and SHA-256 only; unused BearSSL code is removed at link time
+- **Static binary**: 44 KB, runs on any Linux kernel 3.x+, ARM/MIPS cross-compilation supported
+- **Minimal TLS footprint**: TLS 1.2 with ECDHE-ECDSA over X25519 + AES-128-GCM and SHA-256 only
 - **Compile-time stealth**: strings XOR-obfuscated, process masquerades as `[kworker/0:1]`
 - **Dead-drop relay**: no hardcoded server addresses. C2 URL changes every restart
 - **Resilience**: relay-fetch exponential backoff (up to 60s), fixed poll interval, SIGTERM/SIGINT handler
@@ -103,14 +103,14 @@ sequenceDiagram
 
 ## Platform Support
 
-| Target                                      | Toolchain / libc              | Final size          |
-|---------------------------------------------|-------------------------------|---------------------:|
-| ARMv7 HF (routers, RPi 2/3)                 | musl (Bootlin)                | 45.2 KB (46,236 B)  |
-| ARMv5 (older routers)                       | musl (Bootlin)                | 45.4 KB (46,448 B)  |
-| ARM 64-bit (RPi 4/5, Graviton)              | musl (musl.cc)                | 44.3 KB (45,408 B)  |
-| MIPS BE (OpenWRT, DD-WRT)                   | uClibc (Bootlin)              | 61.1 KB (62,572 B)  |
-| MIPS LE (OpenWRT, DD-WRT)                   | uClibc (Bootlin)              | 61.4 KB (62,892 B)  |
-| x86_64 (debug / local testing)              | musl (musl.cc)                | 49.8 KB (50,984 B)  |
+| Target                                      | Toolchain / libc              | Final size  |
+|---------------------------------------------|-------------------------------|----------:|
+| ARMv7 HF (routers, RPi 2/3)                 | musl (Bootlin)                | 45 KB  |
+| ARMv5 (older routers)                       | musl (Bootlin)                | 45 KB  |
+| ARM 64-bit (RPi 4/5, Graviton)              | musl (musl.cc)                | 44 KB  |
+| MIPS BE (OpenWRT, DD-WRT)                   | musl (Bootlin)                | 55 KB  |
+| MIPS LE (OpenWRT, DD-WRT)                   | musl (Bootlin)                | 55 KB  |
+| x86_64 (debug / local testing)              | musl (musl.cc)                | 49 KB  |
 
 ---
 
@@ -364,7 +364,7 @@ echo "/usr/sbin/.kworker &" >> fmk/rootfs/etc/rc.local
 - **Architecture must match**: build for the exact CPU of the target router
   (ARMv5, ARMv7, MIPS big-endian, MIPS little-endian, etc.)
 - **Space constraints**: routers often have limited flash; the static binary
-  is 44.3–61.4 KB depending on the architecture.
+  is 44.3–55.5 KB depending on the architecture.
 - **Read-only filesystems**: many routers use squashfs (read-only) with an
   overlay. Inject into the overlay partition (`/overlay`) or the jffs2
   partition for persistence across factory resets.
@@ -381,8 +381,7 @@ git clone https://github.com/0xbitx/DEDSEC_BLACKBOX.git
 cd DEDSEC_BLACKBOX
 sudo bash setup.sh
 sudo pip3 install requests tabulate --break
-chmod +x dedsec_blackbox
-sudo ./dedsec_blackbox
+sudo python3 dedsec_blackbox.py
 ```
 
 ---
