@@ -1,9 +1,10 @@
 
 <p align="center">
-<img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcnRjeXdib2JkZXphOHo4cmNhajdidzMyMWpkODN4Y3prbjNlM21xayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/629GlaFwxaOdUajE9g/giphy.gif", width="400", height="400">
+<img src="https://github.com/user-attachments/assets/2669121b-e42c-40aa-8575-ab9d557b2ce2", width="400", height="400">
 </p>
 
 <h1 align="center">BLACKBOX</h1>
+<h4 align="center">(Router Implant)</h4>
 <p align="center"><code>HTTPS-based Router Backdoor: shell access, zero infrastructure, single-binary deploy</code></p>
 
 <p align="center">
@@ -20,7 +21,7 @@ access on compromised routers and embedded devices. It focuses on **stealth**,
 tunnels** to mask the operator's infrastructure and keep the command and
 control channel anonymous.
 
-The implant is a single fully-static C++ binary (**44K B** depending on
+The implant is a single fully-static C++ binary (**44 KB** depending on
 the target) that runs on any Linux distribution with **zero dependencies**: no
 libraries, no interpreters, no runtime requirements, and no external services
 to configure. Deploy it on routers running OpenWRT, DD-WRT, ARM-based devices,
