@@ -118,9 +118,9 @@ sequenceDiagram
 | Tool Screenshots |
 |-------|
 | ![screenshot](https://github.com/user-attachments/assets/0fded1c2-c3df-48ec-bf7c-f5bce6db8d2d) |
-| ![screenshot](https://github.com/user-attachments/assets/f3e55b8b-205f-4354-8aec-a40788b44af5) |
-| ![screenshot](https://github.com/user-attachments/assets/f1847cf3-ee97-4c1d-89bc-45209f13951a) |
-| ![screenshot](https://github.com/user-attachments/assets/15554eff-b631-4df3-a547-ae10823d4245) |
+| ![screenshot](https://github.com/user-attachments/assets/1ad6658d-3bbd-4289-9686-09c811fb1cd1) |
+| ![screenshot](https://github.com/user-attachments/assets/3e3efdcd-7049-4f55-bc5f-f43b0c4d4efa) |
+| ![screenshot](https://github.com/user-attachments/assets/680396af-5d29-4854-ad61-c9054fc89119) |
 
 ---
 
